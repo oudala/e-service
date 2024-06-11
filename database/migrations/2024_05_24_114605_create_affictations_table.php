@@ -23,7 +23,7 @@ class CreateAffictationsTable extends Migration
             $table->foreign('filiers_id')->references('id')->on('filieres')->onDelete('cascade')->onUpdate('set null');
             $table->string('description')->nullable();
             $table->string('created_by')->nullable();
-            $table->timestamps();
+            $table->timestamps();   
         });
     }
 

@@ -11,7 +11,8 @@ class filieres extends Model
     protected $fillable=[
         'name',
         'description',  
-        'department_id'
+        'department_id',
+        'level',
     ];
     public function departement()
     {

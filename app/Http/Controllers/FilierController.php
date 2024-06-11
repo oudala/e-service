@@ -42,6 +42,7 @@ class FilierController extends Controller
                 'name' => $request->module_name,
                 'description' => $request->description,
                 'department_id' => $request->Module_id,
+                'level' => $request->level
             ]);
             session()->flash('Add', 'Module has been added successfully');
             return redirect('/filiere'); 

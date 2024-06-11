@@ -137,14 +137,13 @@
                                 <input type="text" class="form-control" id="module_name" name="module_name" required>
                             </div>
 
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">  </label>
+                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">filieres</label>
                             <select name="Module_id" id="module_id" class="form-control" required>
                                 <option value="" selected disabled>Select filier</option>
                                 @foreach ($filieres as $x)
                                     <option value="{{ $x->id }}">{{ $x->name }}</option>
                                 @endforeach
                             </select>
-
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">description</label>
                                 <textarea class="form-control" id="description" name="description" rows="3"></textarea>
@@ -184,7 +183,7 @@
                                 @foreach ($filieres as $x)
                                     <option value="{{ $x->id }}">{{ $x->name }}</option>
                                 @endforeach
-                            </select>
+                            </select>                 
                             <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea name="description" cols="20" rows="5" id='description' class="form-control"></textarea>

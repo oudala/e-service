@@ -67,7 +67,7 @@
                         <div class="card mg-b-20">
                             <div class="card-header pb-0">
                                 <div class="d-flex justify-content-between">
-                                    <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale" data-toggle="modal" href="#exampleModal">add Module </a>
+                                    <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale" data-toggle="modal" href="#exampleModal">add filiere </a>
                                 </div>
 
                             </div>
@@ -122,7 +122,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"> Add Module</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"> Add filiere</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -135,13 +135,20 @@
                                 <input type="text" class="form-control" id="module_name" name="module_name" required>
                             </div>
 
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">  </label>
+                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">departement</label>
                             <select name="Module_id" id="module_id" class="form-control" required>
                                 <option value="" selected disabled>Select filier</option>
                                 @foreach ($departement as $x)
                                     <option value="{{ $x->id }}">{{ $x->name }}</option>
                                 @endforeach
                             </select>
+                            <br>
+                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">level</label>
+                            <select name="level" id="level" class="custom-select my-1 mr-sm-2" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select> 
 
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">description</label>
@@ -173,16 +180,23 @@
                         @csrf
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="Module_name">Module Name:</label>
+                                <label for="Module_name">Filiere Name:</label>
                                 <input type="hidden" class="form-control" name="id" id="Module_id" value="">
                                 <input type="text" class="form-control" name="name" id="Module_name" value="">
                             </div> 
-                            <label class="my-1 mr-2" for="filiere_id">Filiere</label>
+                            <label class="my-1 mr-2" for="filiere_id">departement</label>
                             <select name="filiere_id" id="filiere_id" class="custom-select my-1 mr-sm-2" required>
                                 @foreach ($departement as $x)
-                                    <option value="{{ $x->id }}">{{ $x->name }}</option>
+                                    <option value="{{ $x->id }}">{{ $x->name }} </option>
                                 @endforeach
-                            </select>   c
+                            </select>   
+                            <br>
+                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">level</label>
+                            <select name="level" id="level" class="custom-select my-1 mr-sm-2" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select> 
                             <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea name="description" cols="20" rows="5" id='description' class="form-control"></textarea>

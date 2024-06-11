@@ -16,6 +16,7 @@ class CreateFilieresTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->    unique();
             $table->string('description')->nullable();
+            $table->integer('Semester');
             $table->unsignedBigInteger('department_id')->nullable();
             $table->foreign('department_id')->references('id')->on('departements')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

@@ -79,34 +79,45 @@
                                 <th class="border-bottom-0">teacher</th>
                                 <th class="border-bottom-0">Module</th>
                                 <th class="border-bottom-0">filieres</th>
+                                <th class="border-bottom-0">Level</th>
+                                <th class="border-bottom-0">semestre</th>
                                 <th class="border-bottom-0">description</th>
                                 <th class="border-bottom-0">opption</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <?php $i = 0 ?>
-                            @foreach($affictation as $x)
-                                <?php $i++ ?>
-                                <tr>
-                                    <td>{{ $i }}</td>
-                                    <td><a href="{{ url('profile') }}/{{ $x->User->id }}">{{ $x->User->FirstName }} {{ $x->User->LastName }}</a></td>
-                                    <td>{{ $x->Modele->name }}</td>
-                                    <td>{{ $x->filieres->name }}</td>
-                                    <td>{{ $x->description }}</td>
-                                    <td>
-                                        @php
-                                            $name = $x->User->FirstName . ' ' . $x->User->LastName
-                                        @endphp
-                                        <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
-                                           data-id="{{ $x->id }}" data-name="{{ $name }}"
-                                           data-description="{{ $x->description }}" data-filiere="{{ $x->filieres->name }}" data-module="{{ $x->Modele->name }}" data-toggle="modal" href="#exampleModal2"
-                                           title="edit"><i class="las la-pen"></i></a>
-                                        <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
-                                           data-id="{{ $x->id }}" data-Module_name="{{ $x->name }}" data-toggle="modal"
-                                           href="#modaldemo9" title="delete"><i class="las la-trash"></i></a>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                <?php $i = 0 ?>
+                                @foreach($affictation as $x)
+                                    <?php $i++ ?>
+                                    <tr>
+                                        <td>{{ $i }}</td>
+                                        <td>
+                                            @if($x->User)
+                                                <a href="{{ url('profile') }}/{{ $x->User->id }}">{{ $x->User->FirstName }} {{ $x->User->LastName }}</a>
+                                            @else
+                                                User not found
+                                            @endif
+                                        </td>
+                                        <td>{{ $x->Modele->name ?? 'Model not found' }}</td>
+                                        <td>{{ $x->filieres->name ?? 'Filiere not found' }}</td>
+                                        <td>{{ $x->filieres->level ?? 'Level not found' }}</td>
+                                        <td>{{ $x->semestre ?? 'Semestre not found' }}</td>
+                                        <td>{{ $x->description }}</td>
+                                        <td>
+                                            @php
+                                                $name = $x->User ? $x->User->FirstName . ' ' . $x->User->LastName : 'User not found'
+                                            @endphp
+                                            <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
+                                            data-id="{{ $x->id }}" data-name="{{ $name }}"
+                                            data-description="{{ $x->description }}" data-prof="{{ $x->Prof_id }}" data-filiere="{{ $x->filieres->name ?? '' }}" 
+                                            data-module="{{ $x->Modele->name ?? '' }}" data-toggle="modal" href="#exampleModal2"
+                                            title="edit"><i class="las la-pen"></i></a>
+                                            <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
+                                            data-id="{{ $x->id }}" data-module-name="{{ $x->Modele->name }}" data-toggle="modal"
+                                            href="#modaldemo9" title="delete"><i class="las la-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -116,13 +127,13 @@
 
         <!-- add -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel"> Add Affection</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true">&times;</span> 
                         </button>
                     </div>
                     <form action="{{ route('Affectation.store') }}" method="post">
@@ -140,8 +151,14 @@
                             <select name="Module_id" id="module_id" class="form-control" required>
                                 <option value="" selected disabled>Select Module</option>
                                 @foreach ($module as $x)
-                                    <option value="{{ $x->id }}"> "{{ $x->name }} " {{ $x->filiere->name }} </option>
+                                    <option value="{{ $x->id }}"> "{{ $x->name }} " {{ $x->filiere->name }} Annee  {{ $x->filiere->level }} </option>
                                 @endforeach
+                            </select>
+                            <br>
+                            <label class="my-1 mr-2" for="Semester">Semester</label>          
+                            <select name="Semester" id="Semester" class="custom-select my-1 mr-sm-2" required>
+                                <option value="1">Premier semester</option>
+                                <option value="2">deuxieme semester</option>
                             </select>
                             <br>
                             <div class="form-group">
@@ -160,7 +177,7 @@
 
         <!-- edit -->
         <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -176,14 +193,21 @@
                             <div class="form-group">
                                 <label for="edit_teacher_name">Teacher Name</label>
                                 <input type="hidden" class="form-control" name="id" id="edit_id" value="">
+                                <input type="hidden" class="form-control" name="prof" id="Prof_id" value="">
                                 <input type="text" class="form-control" name="name" id="edit_teacher_name" value="" readonly>
                             </div>
-                            <label class="my-1 mr-2" for="edit_module_id">Filiere</label>
+                            <label class="my-1 mr-2" for="edit_module_id">Select Module</label>
                             <select name="Module_id" id="edit_module_id" class="custom-select my-1 mr-sm-2" required>
                                 @foreach ($module as $x)
-                                    <option value="{{ $x->id }}"> "{{ $x->name }} " {{ $x->filiere->name }} </option>
+                                    <option value="{{ $x->id }}"> "{{ $x->name }} " {{ $x->filiere->name }} Annee  {{ $x->filiere->level }} </option>
                                 @endforeach
                             </select>
+                            <label class="my-1 mr-2" for="Semester">Semester</label>          
+                            <select name="Semester" id="Semester" class="custom-select my-1 mr-sm-2" required>
+                                <option value="1">Premier semester</option>
+                                <option value="2">deuxieme semester</option>
+                            </select>
+                            <br>
                             <div class="form-group">
                                 <label for="edit_description">Description</label>
                                 <textarea name="description" cols="20" rows="5" id='edit_description' class="form-control"></textarea>
@@ -203,15 +227,18 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content modal-content-demo">
                     <div class="modal-header">
-                        <h6 class="modal-title">Delete Module</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+                        <h6 class="modal-title">Delete Module</h6>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <form action="Affectation/destroy" method="post">
+                    <form id="deleteForm" action="Affectation/destroy" method="post">
                         {{ method_field('delete') }}
                         {{ csrf_field() }}
                         <div class="modal-body">
                             <p>Are you sure you want to delete this?</p><br>
                             <input type="hidden" name="id" id="delete_id" value="">
-                            <input class="form-control" name="Module_name" id="delete_Module_name" type="text" readonly>
+                            <input class="form-control" name="module_name" id="delete_Module_name" type="text" readonly>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -221,7 +248,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
 @endsection
 @section('js')
@@ -252,24 +278,21 @@
             var id = button.data('id');
             var name = button.data('name');
             var description = button.data('description');
+            var prof = button.data('prof');
             var filiere = button.data('filiere');
-            var module = button.data('module');
-
-            var modal = $(this);
-            modal.find('.modal-body #edit_id').val(id);
-            modal.find('.modal-body #edit_teacher_name').val(name);
-            modal.find('.modal-body #edit_description').val(description);
-            modal.find('.modal-body #edit_module_id').val(module);
+            var moduule = button.data('module');
         });
-
-        $('#modaldemo9').on('show.bs.modal', function (event) {
+            $('#modaldemo9').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');
-            var Module_name = button.data('Module_name');
+            var moduleName = button.data('module-name');
 
             var modal = $(this);
             modal.find('.modal-body #delete_id').val(id);
-            modal.find('.modal-body #delete_Module_name').val(Module_name);
+            modal.find('.modal-body #delete_Module_name').val(moduleName);
+
+            // Set the form action to include the module ID
         });
+
     </script>
 @endsection

@@ -107,7 +107,7 @@ class UserController extends Controller
             $imageName = $request->cni . '.' . $image->getClientOriginalExtension();
 
             $attachments = new AttachmentUser();
-            $attachments->file_name = $file_name;
+            $attachments->file_name = $file_name;   
             $attachments->teacher_number = $teacher_number;
             $attachments->Created_by = Auth::user()->FirstName;
             $attachments->teacher_id = $User;

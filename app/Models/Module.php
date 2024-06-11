@@ -11,16 +11,16 @@ class Module extends Model
     protected $fillable=[
         'name',
         'description',  
-        'filiere_id'
+        'filiere_id',
     ];
     public function filiere()
-   {
-   return $this->belongsTo(filieres::class);
-   }
+    {
+    return $this->belongsTo(filieres::class);
+    }
 
-   public function Affictation()
-   {
-       return $this->hasMany('App\Models\Affictation', 'Modul_id');
-   }
+    public function Affictation()
+    {
+        return $this->hasMany('App\Models\Affictation', 'Modul_id');
+    }
 }
 

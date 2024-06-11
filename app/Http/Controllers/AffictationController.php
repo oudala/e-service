@@ -17,13 +17,15 @@ class AffictationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   $id_filiere=auth()->user()->department_id;
+    {
+        $id_filiere = Auth::user()->department_id;
         $affictation = Affictation::all();
-        $filieres = filieres::where('department_id', $id_filiere )->first();
-        $module=Module::where('filiere_id', $filieres->id)->get();
-        $teachers=User::whereIn('Rolee',['1','2','3','4'])->get();
-        return view('affectation/affectation',compact('filieres','module','teachers','affictation'));
+        $filieres = filieres::where('department_id', $id_filiere)->first();
+        $module = Module::where('filiere_id', $filieres->id)->get();
+        $teachers = User::whereIn('Rolee', ['1', '2', '3', '4'])->whereNull('deleted_at')->get();
+        return view('affectation.affectation', compact('filieres', 'module', 'teachers', 'affictation'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -42,13 +44,14 @@ class AffictationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {  
+    {
         Affictation::create([
             'Prof_id' => $request->teacher_id,
             'description' => $request->description,
             'filiers_id' => Auth::user()->Coordinateur_fillier,
             'Modul_id' => $request->Module_id,
             'created_by'=> Auth::user()->LastName,
+            'semestre' => $request->Semester,
         ]);
         session()->flash('Add', 'Affectation has been added successfully');
         return redirect('/Affectation'); 
@@ -83,9 +86,20 @@ class AffictationController extends Controller
      * @param  \App\Models\Affictation  $affictation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Affictation $affictation)
-    {
-        //
+    public function update(Request $request)
+    {   
+        $affectation = Affictation::findOrFail($request->id);
+        $affectation->update([
+            'Prof_id' => $request->prof,
+            'Modul_id' => $request->Module_id,
+            'filiers_id' => Auth::user()->Coordinateur_fillier,
+            'description' => $request->description,
+            'created_by' => Auth::user()->LastName,
+            'semestre' => $request->Semester,
+        ]);
+
+        session()->flash('Edit', 'Affectation has been updated successfully');
+        return redirect('/Affectation');
     }
 
     /**
@@ -95,7 +109,7 @@ class AffictationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
-    {   
+    {       
         $Affictation = Affictation::findOrFail($request->id);
         $Affictation->delete();
         session()->flash('delete', 'Affectation has been deleted successfully');
